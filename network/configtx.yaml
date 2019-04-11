@@ -2,36 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-
 ---
-################################################################################
-#
-#   Profile
-#
-#   - Different configuration profiles may be encoded here to be specified
-#   as parameters to the configtxgen tool
-#
-################################################################################
-Profiles:
-
-    TwoOrgsOrdererGenesis:
-        Orderer:
-            <<: *OrdererDefaults
-            Organizations:
-                - *OrdererOrg
-        Consortiums:
-            SampleConsortium:
-                Organizations:
-                    - *Org1
-                    - *Org2
-    TwoOrgsChannel:
-        Consortium: SampleConsortium
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-                - *Org1
-                - *Org2
-
 ################################################################################
 #
 #   Section: Organizations
@@ -65,12 +36,12 @@ Organizations:
 
         MSPDir: crypto-config/peerOrganizations/org1.example.com/msp
 
-        # AnchorPeers:
-        #     # AnchorPeers defines the location of peers which can be used
-        #     # for cross org gossip communication.  Note, this value is only
-        #     # encoded in the genesis block in the Application section context
-        #     - Host: peer0.org1.example.com
-        #       Port: 7051
+        AnchorPeers:
+        # AnchorPeers defines the location of peers which can be used
+        # for cross org gossip communication.  Note, this value is only
+        # encoded in the genesis block in the Application section context
+        - Host: peer0.org1.example.com
+          Port: 7051
 
     - &Org2
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -82,12 +53,12 @@ Organizations:
 
         MSPDir: crypto-config/peerOrganizations/org2.example.com/msp
 
-        # AnchorPeers:
-        #     # AnchorPeers defines the location of peers which can be used
-        #     # for cross org gossip communication.  Note, this value is only
-        #     # encoded in the genesis block in the Application section context
-        #     - Host: peer0.org2.example.com
-        #       Port: 7051
+        AnchorPeers:
+        # AnchorPeers defines the location of peers which can be used
+        # for cross org gossip communication.  Note, this value is only
+        # encoded in the genesis block in the Application section context
+        - Host: peer0.org2.example.com
+          Port: 7051
 
 ################################################################################
 #
@@ -144,6 +115,35 @@ Orderer: &OrdererDefaults
 ################################################################################
 Application: &ApplicationDefaults
 
-    # Organizations is the list of orgs which are defined as participants on
-    # the application side of the network
-    Organizations:
+  # Organizations is the list of orgs which are defined as participants on
+  # the application side of the network
+  Organizations:
+
+################################################################################
+#
+#   Profile
+#
+#   - Different configuration profiles may be encoded here to be specified
+#   as parameters to the configtxgen tool
+#
+################################################################################
+Profiles:
+
+    TwoOrgsOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Org1
+                    - *Org2
+
+    TwoOrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
