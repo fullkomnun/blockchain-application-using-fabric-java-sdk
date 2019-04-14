@@ -21,6 +21,19 @@ BROADCAST_MSG "generating key material"
 cryptogen generate --config=./crypto-config.yaml --output="./crypto-config/"
 #find ./crypto-config/ -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
 
+ca_org1_keyfile_token="{{ ca_org1_keyfile }}"
+ca_org1_keyfile=$(find ./crypto-config/peerOrganizations/org1.example.com/ca/ -name "*sk" -type f -exec basename "{}" ';')
+ca_org2_keyfile_token="{{ ca_org2_keyfile }}"
+ca_org2_keyfile=$(find ./crypto-config/peerOrganizations/org2.example.com/ca/ -name "*sk" -type f -exec basename "{}" ';')
+
+echo ${ca_org1_keyfile_token} = ${ca_org1_keyfile}
+echo ${ca_org2_keyfile_token} = ${ca_org2_keyfile}
+
+sed -e "s/${ca_org1_keyfile_token}/${ca_org1_keyfile}/g" \
+    -e "s/${ca_org2_keyfile_token}/${ca_org2_keyfile}/g" \
+    < docker-compose-template.yml \
+    > docker-compose.yml
+
 rm -rf "./config/"
 
 mkdir -p "./config/"
