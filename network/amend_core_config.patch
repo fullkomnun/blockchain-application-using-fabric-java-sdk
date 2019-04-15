@@ -1,0 +1,43 @@
+From 9f5334b9a30831c73caae34b70fa512985950240 Mon Sep 17 00:00:00 2001
+From: ornoyman <or.noyman@citi.com>
+Date: Mon, 15 Apr 2019 08:06:19 +0300
+Subject: [PATCH] amended core.yaml to set bccsp as pkcs#11
+
+---
+ sampleconfig/core.yaml | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/sampleconfig/core.yaml b/sampleconfig/core.yaml
+index 32666c757..1bbaaed2c 100644
+--- a/sampleconfig/core.yaml
++++ b/sampleconfig/core.yaml
+@@ -242,21 +242,12 @@ peer:
+     # modification that might corrupt the peer operations.
+     fileSystemPath: /var/hyperledger/production
+ 
+-    # BCCSP (Blockchain crypto provider): Select which crypto implementation or
+-    # library to use
++    #############################################################################
++    # BCCSP (BlockChain Crypto Service Provider) section is used to select which
++    # crypto library implementation to use
++    #############################################################################
+     BCCSP:
+-        Default: SW
+-        # Settings for the SW crypto provider (i.e. when DEFAULT: SW)
+-        SW:
+-            # TODO: The default Hash and Security level needs refactoring to be
+-            # fully configurable. Changing these defaults requires coordination
+-            # SHA2 is hardcoded in several places, not only BCCSP
+-            Hash: SHA2
+-            Security: 256
+-            # Location of Key Store
+-            FileKeyStore:
+-                # If "", defaults to 'mspConfigPath'/keystore
+-                KeyStore:
++        Default: PKCS11
+         # Settings for the PKCS#11 crypto provider (i.e. when DEFAULT: PKCS11)
+         PKCS11:
+             # Location of the PKCS11 module library
+-- 
+2.15.0
+

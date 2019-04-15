@@ -1,0 +1,57 @@
+From fa78e32fe6000ff0d2247ec72b8c1516957055a9 Mon Sep 17 00:00:00 2001
+From: ornoyman <or.noyman@citi.com>
+Date: Mon, 15 Apr 2019 08:00:26 +0300
+Subject: [PATCH] amend orderer.yaml to set bccsp as pkcs#11
+
+---
+ sampleconfig/orderer.yaml | 33 +++++++++++++++------------------
+ 1 file changed, 15 insertions(+), 18 deletions(-)
+
+diff --git a/sampleconfig/orderer.yaml b/sampleconfig/orderer.yaml
+index e9abd1fe7..d9019fb58 100644
+--- a/sampleconfig/orderer.yaml
++++ b/sampleconfig/orderer.yaml
+@@ -115,25 +115,22 @@ General:
+         Enabled: false
+         Address: 0.0.0.0:6060
+ 
+-    # BCCSP configures the blockchain crypto service providers.
++    #############################################################################
++    # BCCSP (BlockChain Crypto Service Provider) section is used to select which
++    # crypto library implementation to use
++    #############################################################################
+     BCCSP:
+-        # Default specifies the preferred blockchain crypto service provider
+-        # to use. If the preferred provider is not available, the software
+-        # based provider ("SW") will be used.
+-        # Valid providers are:
+-        #  - SW: a software based crypto provider
+-        #  - PKCS11: a CA hardware security module crypto provider.
+-        Default: SW
+-
+-        # SW configures the software based blockchain crypto provider.
+-        SW:
+-            # TODO: The default Hash and Security level needs refactoring to be
+-            # fully configurable. Changing these defaults requires coordination
+-            # SHA2 is hardcoded in several places, not only BCCSP
+-            Hash: SHA2
+-            Security: 256
+-            # Location of key store. If this is unset, a location will be
+-            # chosen using: 'LocalMSPDir'/keystore
++        Default: PKCS11
++        # Settings for the PKCS#11 crypto provider (i.e. when DEFAULT: PKCS11)
++        PKCS11:
++            # Location of the PKCS11 module library
++            Library:
++            # Token Label
++            Label:
++            # User PIN
++            Pin:
++            Hash:
++            Security:
+             FileKeyStore:
+                 KeyStore:
+ 
+-- 
+2.15.0
+
