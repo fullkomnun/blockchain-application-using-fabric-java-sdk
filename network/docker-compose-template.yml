@@ -11,13 +11,23 @@ services:
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org1
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.org1.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/{{ ca_org1_keyfile }}
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/msp/ca.org1.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/msp/{{ ca_org1_keyfile }}
+      # CA SERVER BCCSP OPTIONS
+      - FABRIC_CA_SERVER_BCCSP_DEFAULT=PKCS11
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_LIBRARY=/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_PIN=98765432
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_LABEL=ForFabric
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_FILEKEYSTORE_KEYSTORE=/etc/hyperledger/fabric-ca-server/msp/keystore
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_HASH=SHA2
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_SECURITY=256
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    command: sh -c 'bash /tmp/install/setup.sh && fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../network_resources/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server
+      - ../network_resources/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp
+      - ../network_resources/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml:ro
+      - ./setup.sh:/tmp/install/setup.sh:ro
     container_name: ca_peerOrg1
     networks:
       - custom
@@ -27,13 +37,23 @@ services:
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org2
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/{{ ca_org2_keyfile }}
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/msp/ca.org2.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/msp/{{ ca_org2_keyfile }}
+      # CA SERVER BCCSP OPTIONS
+      - FABRIC_CA_SERVER_BCCSP_DEFAULT=PKCS11
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_LIBRARY=/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_PIN=98765432
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_LABEL=ForFabric
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_FILEKEYSTORE_KEYSTORE=/etc/hyperledger/fabric-ca-server/msp/keystore
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_HASH=SHA2
+      - FABRIC_CA_SERVER_BCCSP_PKCS11_SECURITY=256
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    command: sh -c 'bash /tmp/install/setup.sh && fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../network_resources/crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server
+      - ../network_resources/crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp
+      - ../network_resources/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml:ro
+      - ./setup.sh:/tmp/install/setup.sh:ro
     container_name: ca_peerOrg2
     networks:
       - custom
