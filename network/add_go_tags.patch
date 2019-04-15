@@ -1,0 +1,25 @@
+From 1b788d643e7571b631182f2db081865fd128a903 Mon Sep 17 00:00:00 2001
+From: ornoyman <or.noyman@citi.com>
+Date: Mon, 11 Mar 2019 11:37:54 +0200
+Subject: [PATCH] add GO_TAGS flag when building binaries in docker context
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 595e3fb..487da34 100644
+--- a/Makefile
++++ b/Makefile
+@@ -125,7 +125,7 @@ build/docker/bin/%:
+ 		-v $(abspath build/docker/bin):/opt/gopath/bin \
+ 		-v $(abspath build/docker/$(@F)/pkg):/opt/gopath/pkg \
+ 		$(BASE_DOCKER_NS)/fabric-baseimage:$(BASE_DOCKER_TAG) \
+-		go install -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
++		go install -tags "$(GO_TAGS)" -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
+ 	@touch $@
+ 
+ build/image/%/$(DUMMY): Makefile build/image/%/payload
+-- 
+2.15.0
+
