@@ -50,6 +50,10 @@ BROADCAST_MSG "generating config transaction"
 configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
 #configtxgen -inspectChannelCreateTx ./config/channel.tx
 
+BROADCAST_MSG "generating anchor peers updates"
+configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./config/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
+
 BROADCAST_MSG "copying artifacts to network_resources"
 rm -rf ../network_resources/crypto-config
 mv ./crypto-config ../network_resources/
