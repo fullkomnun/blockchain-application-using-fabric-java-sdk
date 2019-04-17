@@ -3,8 +3,8 @@
 # setup softhsm2
 SETUP_SOFTHSM() {
   # Install softhsm2 and opensc for pkcs11 testing (libhsm-bin also an option)
-  apt-get update -y
-  apt-get install -y --no-install-recommends softhsm2 opensc libtool libltdl-dev
+  apt update -y
+  apt install -y --no-install-recommends softhsm2 libtool libltdl-dev
 
   # Create tokens directory (or you get - ERROR: Could not initialize the library)
   mkdir -p /var/lib/softhsm/tokens/
