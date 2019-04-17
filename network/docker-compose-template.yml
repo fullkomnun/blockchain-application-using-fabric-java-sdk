@@ -7,7 +7,7 @@ networks:
 services:
 
   ca.org1.example.com:
-    image: hyperledger/fabric-ca:amd64-1.4.0
+    image: fullkomnun/fabric-ca-softhsm:amd64-1.4.0
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org1
@@ -23,17 +23,16 @@ services:
       - FABRIC_CA_SERVER_BCCSP_PKCS11_SECURITY=256
     ports:
       - "7054:7054"
-    command: sh -c 'bash /tmp/install/setup.sh && fabric-ca-server start -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../network_resources/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp
       - ../network_resources/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml:ro
-      - ./setup.sh:/tmp/install/setup.sh:ro
     container_name: ca_peerOrg1
     networks:
       - custom
 
   ca.org2.example.com:
-    image: hyperledger/fabric-ca:amd64-1.4.0
+    image: fullkomnun/fabric-ca-softhsm:amd64-1.4.0
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org2
@@ -49,18 +48,17 @@ services:
       - FABRIC_CA_SERVER_BCCSP_PKCS11_SECURITY=256
     ports:
       - "8054:7054"
-    command: sh -c 'bash /tmp/install/setup.sh && fabric-ca-server start -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../network_resources/crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp
       - ../network_resources/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml:ro
-      - ./setup.sh:/tmp/install/setup.sh:ro
     container_name: ca_peerOrg2
     networks:
       - custom
 
   orderer.example.com:
     container_name: orderer.example.com
-    image: hyperledger/fabric-orderer:amd64-1.4.0
+    image: fullkomnun/fabric-orderer-softhsm:amd64-1.4.0
     environment:
       - FABRIC_LOGGING_SPEC=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -77,7 +75,7 @@ services:
       - ORDERER_GENERAL_BCCSP_PKCS11_HASH=SHA2
       - ORDERER_GENERAL_BCCSP_PKCS11_SECURITY=256
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
-    command: sh -c 'bash /tmp/install/setup.sh && orderer'
+    command: sh -c 'orderer'
     networks:
       - custom
     ports:
@@ -88,11 +86,10 @@ services:
         - ../network_resources/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
         - ../network_resources/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/msp/peerOrg2
         - ../network_resources/orderer.yaml:/etc/hyperledger/msp/orderer/orderer.yaml:ro
-        - ./setup.sh:/tmp/install/setup.sh:ro
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
-    image: hyperledger/fabric-peer:amd64-1.4.0
+    image: fullkomnun/fabric-peer-softhsm:amd64-1.4.0
     environment:
       - FABRIC_LOGGING_SPEC=debug
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -115,7 +112,7 @@ services:
       - CORE_PEER_BCCSP_PKCS11_HASH=SHA2
       - CORE_PEER_BCCSP_PKCS11_SECURITY=256
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: sh -c 'bash /tmp/install/setup.sh && peer node start'
+    command: sh -c 'peer node start'
     ports:
       - 7051:7051
       - 7053:7053
@@ -126,13 +123,12 @@ services:
         - ../network_resources/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ../network_resources/crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ../network_resources/config:/etc/hyperledger/configtx
-        - ./setup.sh:/tmp/install/setup.sh:ro
     depends_on:
       - orderer.example.com
 
   peer1.org1.example.com:
     container_name: peer1.org1.example.com
-    image: hyperledger/fabric-peer:amd64-1.4.0
+    image: fullkomnun/fabric-peer-softhsm:amd64-1.4.0
     environment:
       - FABRIC_LOGGING_SPEC=debug
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -152,7 +148,7 @@ services:
       - CORE_PEER_BCCSP_PKCS11_HASH=SHA2
       - CORE_PEER_BCCSP_PKCS11_SECURITY=256
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: sh -c 'bash /tmp/install/setup.sh && peer node start'
+    command: sh -c 'peer node start'
     networks:
       - custom
     ports:
@@ -163,13 +159,12 @@ services:
         - ../network_resources/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ../network_resources/crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ../network_resources/config:/etc/hyperledger/configtx
-        - ./setup.sh:/tmp/install/setup.sh:ro
     depends_on:
       - orderer.example.com
 
   peer0.org2.example.com:
     container_name: peer0.org2.example.com
-    image: hyperledger/fabric-peer:amd64-1.4.0
+    image: fullkomnun/fabric-peer-softhsm:amd64-1.4.0
     environment:
       - FABRIC_LOGGING_SPEC=debug
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -189,7 +184,7 @@ services:
       - CORE_PEER_BCCSP_PKCS11_HASH=SHA2
       - CORE_PEER_BCCSP_PKCS11_SECURITY=256
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: sh -c 'bash /tmp/install/setup.sh && peer node start'
+    command: sh -c 'peer node start'
     networks:
       - custom
     ports:
@@ -200,13 +195,12 @@ services:
         - ../network_resources/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - ../network_resources/crypto-config/peerOrganizations/org2.example.com/users:/etc/hyperledger/msp/users
         - ../network_resources/config:/etc/hyperledger/configtx
-        - ./setup.sh:/tmp/install/setup.sh:ro
     depends_on:
       - orderer.example.com
 
   peer1.org2.example.com:
     container_name: peer1.org2.example.com
-    image: hyperledger/fabric-peer:amd64-1.4.0
+    image: fullkomnun/fabric-peer-softhsm:amd64-1.4.0
     environment:
       - FABRIC_LOGGING_SPEC=debug
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -226,7 +220,7 @@ services:
       - CORE_PEER_BCCSP_PKCS11_HASH=SHA2
       - CORE_PEER_BCCSP_PKCS11_SECURITY=256
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: sh -c 'bash /tmp/install/setup.sh && peer node start'
+    command: sh -c 'peer node start'
     networks:
       - custom
     ports:
@@ -237,6 +231,5 @@ services:
         - ../network_resources/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - ../network_resources/crypto-config/peerOrganizations/org2.example.com/users:/etc/hyperledger/msp/users
         - ../network_resources/config:/etc/hyperledger/configtx
-        - ./setup.sh:/tmp/install/setup.sh:ro
     depends_on:
       - orderer.example.com

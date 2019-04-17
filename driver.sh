@@ -15,6 +15,7 @@ BROADCAST_MSG() {
 
 BROADCAST_MSG "preparing tests"
 cd java
+mvn clean
 mvn install
 cd target
 cp blockchain-java-sdk-0.0.1-SNAPSHOT-jar-with-dependencies.jar blockchain-client.jar

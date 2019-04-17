@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -xe
 
 MY_PATH="`dirname \"$0\"`"              # relative
 MY_PATH="`( cd \"$MY_PATH\" && pwd )`"  # absolutized and normalized
@@ -36,3 +36,11 @@ FABRIC_CA_DYNAMIC_LINK=true GO_TAGS=pkcs11 make docker
 chmod -R +rw $TMP
 
 rm -Rf $TMP
+
+cd $MY_PATH
+# build fabric-ca-softhsm image
+docker build -f ./images/fabric-node-softhsm/Dockerfile \
+ --build-arg FABRIC_NODE_BASE_IMAGE=hyperledger/fabric-ca \
+ --build-arg FABRIC_NODE_TAG=amd64-1.4.0 \
+ -t fullkomnun/fabric-ca-softhsm:amd64-1.4.0 \
+ ./images/fabric-node-softhsm
