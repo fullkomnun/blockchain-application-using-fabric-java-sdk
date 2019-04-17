@@ -103,6 +103,7 @@ public class InvokeQueryChaincode {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
