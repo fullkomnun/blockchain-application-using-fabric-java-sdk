@@ -11,7 +11,7 @@ fi
 
 # remove chaincode docker images
 if [ "$(docker images dev-* -q)" ]; then
-	docker rmi $(docker images dev-* -q)
+	docker rmi -f $(docker images dev-* -q)
 fi
 
 # Your system is now clean
